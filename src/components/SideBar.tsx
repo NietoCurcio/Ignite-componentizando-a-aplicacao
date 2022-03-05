@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react'
 import { Button } from './Button'
 import { GenreResponseProps } from '../App'
 
@@ -7,14 +8,14 @@ type SideBarProps = {
   setSelectedGenreId: (arg: number) => void
 }
 
-export function SideBar({
+export function SideBarComponent({
   genres,
   setSelectedGenreId,
   selectedGenreId,
 }: SideBarProps) {
-  function handleClickButton(id: number) {
+  const handleClickButton = useCallback((id: number) => {
     setSelectedGenreId(id)
-  }
+  }, [])
 
   return (
     <nav className="sidebar">
@@ -36,3 +37,8 @@ export function SideBar({
     </nav>
   )
 }
+
+export const SideBar = memo(SideBarComponent, (previousProps, nextProps) => {
+  return previousProps.selectedGenreId == nextProps.selectedGenreId
+  // in this case, we know that genres will not update in each re-render
+})
